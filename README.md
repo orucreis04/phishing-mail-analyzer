@@ -2,48 +2,51 @@
 
 **Python:** 3.11+ | **Platform:** Linux/Fedora | **Lisans:** MIT | **GitHub:** [orucreis04/phishing-mail-analyzer](https://github.com/orucreis04/phishing-mail-analyzer)
 
-## Project Overview
+## Proje Özeti
 
-`phishing-mail-analyzer` is a Python 3.11+ CLI tool for static analysis of `.eml` email files. It extracts email headers, body content, URLs, HTML indicators, and attachment metadata, then produces a normalized phishing risk score with both a readable terminal report and a JSON report.
+`phishing-mail-analyzer`, `.eml` formatındaki e-posta dosyalarını statik olarak analiz eden Python 3.11+ uyumlu bir CLI güvenlik aracıdır. E-posta header bilgilerini, gövde içeriğini, URL'leri, HTML göstergelerini ve attachment metadata bilgilerini çıkarır; ardından normalize edilmiş bir phishing risk skoru üretir.
 
-The project is designed as a SOC / Blue Team portfolio tool: modular, testable, Linux-friendly, and focused on safe static analysis workflows.
+Araç, SOC / Blue Team portföy projesi olarak tasarlanmıştır: modülerdir, test edilebilir yapıdadır, Linux/Fedora ortamlarında rahat çalışır ve güvenli statik analiz yaklaşımını temel alır.
 
-## Features
+## Özellikler
 
-- Parse `.eml` email files with Python's standard `email` library
-- Extract Subject, From, To, Date, Message-ID, Return-Path, and Reply-To
-- Analyze sender domain mismatches across From, Return-Path, Reply-To, and Message-ID
-- Check SPF, DKIM, and DMARC results from `Authentication-Results`
-- Parse Received header chains
-- Extract URLs from plain text and HTML bodies
-- Analyze suspicious URLs, URL shorteners, IP-based links, punycode domains, and link text mismatches
-- Detect phishing language, urgency, credential requests, financial terms, threat language, and brand impersonation
-- Detect HTML forms, scripts, and hidden content
-- Analyze attachment metadata without executing or opening file content
-- Generate weighted final risk scoring from header, URL, body, and attachment results
-- Save timestamped JSON reports under `reports/`
-- Print professional terminal summaries with optional color output
+- Python `email` kütüphanesi ile `.eml` dosyası okuma
+- Subject, From, To, Date, Message-ID, Return-Path ve Reply-To alanlarını çıkarma
+- From, Return-Path, Reply-To ve Message-ID domain uyuşmazlıklarını analiz etme
+- `Authentication-Results` içinden SPF, DKIM ve DMARC sonuçlarını kontrol etme
+- Received header zincirini ayrıştırma
+- Plain text ve HTML gövdeden URL çıkarma
+- Şüpheli URL, URL shortener, IP adresli link, punycode domain ve görünen link/href uyuşmazlığı analizi
+- Aciliyet, credential isteği, finansal ifade, tehdit dili ve marka taklidi göstergelerini yakalama
+- HTML form, script ve gizli içerik tespiti
+- Attachment dosyalarını çalıştırmadan yalnızca metadata seviyesinde analiz etme
+- Header, URL, body ve attachment sonuçlarından ağırlıklı final risk skoru üretme
+- `reports/` klasörüne timestamp içeren JSON rapor kaydetme
+- Terminalde profesyonel ve okunabilir özet rapor üretme
+- Renkli terminal çıktısını isteğe bağlı kapatma
 
-## Architecture
+## Mimari
 
-The analyzer follows a staged static-analysis pipeline:
+Analiz akışı aşamalı ve modüler bir statik analiz pipeline'ı olarak çalışır:
 
-1. `parser.py` reads and normalizes the `.eml` file.
-2. `header_analyzer.py` evaluates sender identity and authentication signals.
-3. `url_analyzer.py` extracts and scores URLs from text and HTML.
-4. `body_analyzer.py` evaluates social-engineering and HTML indicators.
-5. `attachment_analyzer.py` evaluates attachment metadata.
-6. `risk_engine.py` combines component scores into a final phishing risk score.
-7. `report_generator.py` writes JSON output and renders the terminal report.
-8. `main.py` exposes the workflow through a professional CLI.
+1. `parser.py` `.eml` dosyasını okur ve normalize eder.
+2. `header_analyzer.py` gönderici kimliği ve authentication sinyallerini analiz eder.
+3. `url_analyzer.py` text ve HTML içinden URL çıkarır ve risk sinyallerini skorlar.
+4. `body_analyzer.py` sosyal mühendislik ve HTML tabanlı göstergeleri değerlendirir.
+5. `attachment_analyzer.py` attachment metadata risklerini analiz eder.
+6. `risk_engine.py` bileşen skorlarını tek final phishing risk skoruna dönüştürür.
+7. `report_generator.py` JSON rapor üretir ve terminal özetini render eder.
+8. `main.py` tüm akışı profesyonel CLI arayüzüyle sunar.
 
-## Folder Structure
+## Klasör Yapısı
 
 ```text
 phishing-mail-analyzer/
 ├── main.py
 ├── requirements.txt
 ├── README.md
+├── LICENSE
+├── CONTRIBUTING.md
 ├── samples/
 │   └── sample_phishing.eml
 ├── reports/
@@ -59,15 +62,15 @@ phishing-mail-analyzer/
 │   └── utils.py
 ```
 
-## Installation on Fedora/Linux
+## Fedora/Linux Kurulumu
 
-Install Python tooling if needed:
+Python araçları kurulu değilse:
 
 ```bash
 sudo dnf install -y python3 python3-pip python3-virtualenv
 ```
 
-Create a virtual environment and install dependencies:
+Sanal ortam oluşturup bağımlılıkları kurun:
 
 ```bash
 cd phishing-mail-analyzer
@@ -77,64 +80,64 @@ pip install -r requirements.txt
 python main.py analyze samples/sample_phishing.eml
 ```
 
-## Usage
+## Kullanım
 
-The CLI provides two commands:
+CLI iki ana komut sağlar:
 
 ```bash
 python main.py analyze <email.eml>
 python main.py version
 ```
 
-Analyze an email and write a timestamped JSON report to `reports/`:
+Bir e-postayı analiz edip `reports/` altında timestamp içeren JSON rapor oluşturmak için:
 
 ```bash
 python main.py analyze samples/sample_phishing.eml
 ```
 
-Print the full JSON report to stdout:
+JSON raporu terminale yazdırmak için:
 
 ```bash
 python main.py analyze samples/sample_phishing.eml --json
 ```
 
-Write the JSON report to a specific path:
+JSON raporu belirli bir dosya yoluna kaydetmek için:
 
 ```bash
 python main.py analyze samples/sample_phishing.eml --output reports/report.json
 ```
 
-Disable colored terminal output:
+Renkli terminal çıktısını kapatmak için:
 
 ```bash
 python main.py analyze samples/sample_phishing.eml --no-color
 ```
 
-## Example Commands
+## Örnek Komutlar
 
 ```bash
-# Show CLI help
+# CLI yardım çıktısı
 python main.py --help
 
-# Show analyzer command help
+# Analyze komutu yardım çıktısı
 python main.py analyze --help
 
-# Analyze the included safe sample
+# Güvenli örnek phishing e-postasını analiz et
 python main.py analyze samples/sample_phishing.eml
 
-# Save a report to a fixed file path
+# Raporu sabit bir dosya yoluna kaydet
 python main.py analyze samples/sample_phishing.eml --output reports/sample_report.json
 
-# Generate machine-readable output
+# Makine tarafından okunabilir JSON çıktı üret
 python main.py analyze samples/sample_phishing.eml --json
 
-# Check the version
+# Versiyon bilgisini göster
 python main.py version
 ```
 
-## Sample Output
+## Örnek Çıktı
 
-Example terminal summary:
+Terminal özet raporu örneği:
 
 ```text
 Phishing Mail Analysis
@@ -161,18 +164,18 @@ Recommendations
 - Do not open links or attachments. Report to security team.
 ```
 
-JSON reports include metadata, parsed email fields, component analysis results, final risk scoring, and recommendations.
+JSON raporları e-posta metadata bilgilerini, component analiz sonuçlarını, final risk skorunu ve önerileri içerir.
 
-## Risk Scoring Model
+## Risk Skorlama Modeli
 
-The final risk score is normalized to `0-100` and combines component scores with these weights:
+Final risk skoru `0-100` arasında normalize edilir ve bileşen skorları şu ağırlıklarla hesaplanır:
 
-- Header analysis: `30%`
-- URL analysis: `35%`
-- Body analysis: `20%`
-- Attachment analysis: `15%`
+- Header analizi: `%30`
+- URL analizi: `%35`
+- Body analizi: `%20`
+- Attachment analizi: `%15`
 
-Risk levels:
+Risk seviyeleri:
 
 ```text
 0-24   Low
@@ -181,33 +184,33 @@ Risk levels:
 75-100 Critical
 ```
 
-Recommendations are generated from the final risk level:
+Final risk seviyesine göre öneriler üretilir:
 
-- Critical: Do not open links or attachments. Report to security team.
-- High: Verify sender identity through another channel.
-- Medium: Review suspicious indicators before interacting.
-- Low: No major phishing indicators found, but remain cautious.
+- Critical: Linkleri veya ekleri açmayın. Güvenlik ekibine raporlayın.
+- High: Gönderici kimliğini farklı bir kanal üzerinden doğrulayın.
+- Medium: Etkileşime geçmeden önce şüpheli göstergeleri inceleyin.
+- Low: Büyük bir phishing göstergesi bulunmadı, yine de dikkatli olun.
 
-## Security Notes
+## Güvenlik Notları
 
-- This tool performs static analysis only.
-- It does not execute attachments.
-- It does not submit URLs to external services.
-- It does not perform active credential collection.
-- The included `samples/sample_phishing.eml` file is a safe, fake phishing sample for testing analyzer behavior.
-- The sample intentionally contains suspicious-looking headers, links, HTML form markup, hidden text, and attachment metadata, but it does not contain real malware or a working phishing payload.
+- Bu araç yalnızca statik analiz yapar.
+- Attachment içeriklerini çalıştırmaz.
+- Şüpheli URL'lere istek göndermez.
+- Credential toplama veya aktif phishing davranışı içermez.
+- `samples/sample_phishing.eml` dosyası güvenli ve tamamen sahte bir test örneğidir.
+- Örnek dosya bilerek şüpheli header, link, HTML form, hidden text ve attachment metadata içerir; gerçek malware veya çalışan phishing payload içermez.
 
-## Roadmap
+## Yol Haritası
 
-- Add unit tests for all analyzer modules
-- Add CSV and SARIF export options
-- Add optional DNS-based SPF/DMARC enrichment
-- Add IOC extraction for SOC workflows
-- Add YARA-compatible attachment metadata tagging
-- Add configurable scoring profiles
-- Add CI workflow for linting and tests
-- Add packaged console entry point
+- Tüm analyzer modülleri için unit test ekleme
+- CSV ve SARIF export seçenekleri
+- Opsiyonel DNS tabanlı SPF/DMARC zenginleştirme
+- SOC iş akışları için IOC çıkarımı
+- YARA uyumlu attachment metadata etiketleme
+- Yapılandırılabilir scoring profilleri
+- Lint ve testler için CI workflow
+- Paketlenmiş console entry point
 
-## Disclaimer
+## Sorumluluk Reddi
 
-`phishing-mail-analyzer` is intended for defensive security education, SOC portfolio work, and internal Blue Team analysis workflows. It is not a replacement for a secure email gateway, EDR, sandbox, or full incident response process. Always handle suspicious email samples in a controlled environment and follow your organization's security procedures.
+`phishing-mail-analyzer`, savunma odaklı güvenlik eğitimi, SOC portföy çalışmaları ve dahili Blue Team analiz iş akışları için geliştirilmiştir. Secure email gateway, EDR, sandbox veya tam kapsamlı incident response sürecinin yerine geçmez. Şüpheli e-posta örneklerini her zaman kontrollü bir ortamda inceleyin ve kurumunuzun güvenlik prosedürlerini takip edin.
